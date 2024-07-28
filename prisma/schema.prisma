@@ -1,0 +1,84 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// schema.prisma
+
+datasource db {
+  provider = "postgresql" // or your preferred database
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  password  String
+  role      UserRole  @default(USER)
+  business  Business?
+  businessId Int?     @unique
+  products  Product[]
+  sales     Sale[]
+  purchases Purchase[]
+
+  @@map("users")
+}
+
+model Business {
+  id            Int       @id @default(autoincrement())
+  name          String
+  contactDetails String
+  ownerId       Int       @unique
+  owner         User      @relation(fields: [ownerId], references: [id])
+  products      Product[]
+
+  @@map("businesses")
+}
+
+model Product {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String
+  price         Float
+  revenueSplit  Float
+  businessId    Int
+  business      Business  @relation(fields: [businessId], references: [id])
+  purchases     Purchase[]
+  sales         Sale[]
+  user          User @relation(fields: [userId], references: [id])
+  userId        Int
+  @@map("products")
+}
+
+model Sale {
+  id            Int       @id @default(autoincrement())
+  amount        Float
+  productId     Int
+  product       Product   @relation(fields: [productId], references: [id])
+  salespersonId Int
+  salesperson   User      @relation(fields: [salespersonId], references: [id])
+  @@map("sales")
+}
+
+model Purchase {
+  id             Int       @id @default(autoincrement())
+  buyerId        Int
+  user           User      @relation(fields: [buyerId], references: [id])
+  productId      Int
+  product        Product   @relation(fields: [productId], references: [id])
+  purchaseDate   DateTime  @default(now())
+  sellerId       Int
+  ProductOwnerId Int       
+  @@map("purchases")
+}
+
+enum UserRole {
+  USER
+  BUSINESS_OWNER
+  SALESPERSON
+}
