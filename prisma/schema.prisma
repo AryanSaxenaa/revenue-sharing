@@ -22,10 +22,11 @@ model User {
   role      UserRole  @default(USER)
   business  Business?
   businessId Int?     @unique
+  sellerId   Int?     @unique
   products  Product[]
-  sales     Sale[]
   purchases Purchase[]
-
+  seller    Seller[]
+  totalAmountSpent  Int
   @@map("users")
 }
 
@@ -34,7 +35,9 @@ model Business {
   name          String
   contactDetails String
   ownerId       Int       @unique
+  paymailId     String    @unique
   owner         User      @relation(fields: [ownerId], references: [id])
+  totalAmountEarned   Int
   products      Product[]
 
   @@map("businesses")
@@ -49,20 +52,20 @@ model Product {
   businessId    Int
   business      Business  @relation(fields: [businessId], references: [id])
   purchases     Purchase[]
-  sales         Sale[]
   user          User @relation(fields: [userId], references: [id])
   userId        Int
   @@map("products")
 }
 
-model Sale {
-  id            Int       @id @default(autoincrement())
-  amount        Float
-  productId     Int
-  product       Product   @relation(fields: [productId], references: [id])
-  salespersonId Int
-  salesperson   User      @relation(fields: [salespersonId], references: [id])
-  @@map("sales")
+
+model Seller {
+  id              Int     @id @default(autoincrement())
+  sellerUserId    Int     
+  userId          User    @relation(fields: [sellerUserId], references: [id])
+  paymailId       String  @unique
+  totalAmountEarned Int   
+  totalSalesMade    Int
+  rank              Int
 }
 
 model Purchase {
@@ -73,7 +76,10 @@ model Purchase {
   product        Product   @relation(fields: [productId], references: [id])
   purchaseDate   DateTime  @default(now())
   sellerId       Int
-  ProductOwnerId Int       
+  ProductOwnerId Int    
+  ProductOwnerPaymailID  String   
+  payedToBusinessTranscationId String 
+  payedToSalesPersonTranscationId  String
   @@map("purchases")
 }
 
@@ -81,4 +87,5 @@ enum UserRole {
   USER
   BUSINESS_OWNER
   SALESPERSON
+  BUSINESS_OWNER_AND_SALESPERSON
 }

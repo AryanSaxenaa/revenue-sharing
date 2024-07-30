@@ -7,3 +7,4 @@ declare module 'express' {
     user?: User; // Optional, as user may not always be present
   }
 }
+

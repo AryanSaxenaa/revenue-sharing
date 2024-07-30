@@ -1,4 +1,10 @@
-import { IsEnum, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateBusinessDto {
   @Length(2, 20)
@@ -7,6 +13,9 @@ export class CreateBusinessDto {
   @Length(2)
   @IsString()
   contactDetails: string;
+  @IsString()
+  @IsNotEmpty()
+  paymailId: string;
 }
 
 enum UserRole {

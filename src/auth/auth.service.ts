@@ -35,6 +35,7 @@ export class AuthService {
       data: {
         password: SignupData.password,
         email: SignupData.email,
+        totalAmountSpent: 0,
       },
     });
     return res;

@@ -9,6 +9,6 @@ export class CreatePlaceOrderDto {
   };
   productId: number;
   sellerId: number;
-  buyerPaymail: string;
+  buyerPaymailId: string;
   buyerPaymailPassword: string;
 }

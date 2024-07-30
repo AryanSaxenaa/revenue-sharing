@@ -1,26 +1,41 @@
 import { Injectable } from '@nestjs/common';
 import { CreateSalespersonDto } from './dto/create-salesperson.dto';
-import { UpdateSalespersonDto } from './dto/update-salesperson.dto';
+import { DatabaseService } from 'src/database/database.module';
 
 @Injectable()
 export class SalespersonService {
-  create(createSalespersonDto: CreateSalespersonDto) {
-    return 'This action adds a new salesperson';
+  constructor(readonly databaseService: DatabaseService) {}
+  async create(userid: number, createSalespersonDto: CreateSalespersonDto) {
+    console.log(userid);
+    const finduser = await this.databaseService.user.findUnique({
+      where: {
+        id: userid,
+      },
+    });
+    if (finduser.role == 'USER') {
+      await this.databaseService.user.update({
+        where: { id: userid },
+        data: { role: 'SALESPERSON' },
+      });
+    } else if (finduser.role == 'BUSINESS_OWNER') {
+      await this.databaseService.user.update({
+        where: {
+          id: userid,
+        },
+        data: {
+          role: 'BUSINESS_OWNER_AND_SALESPERSON',
+        },
+      });
+    }
+    return await this.databaseService.seller.create({
+      data:{
+        paymailId: createSalespersonDto.paymailId,
+        sellerUserId: userid,
+        totalAmountEarned: 0,
+        totalSalesMade: 0,
+        rank: (await this.databaseService.seller.count()) + 1,
+      }
+    });
   }
-
-  findAll() {
-    return `This action returns all salesperson`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} salesperson`;
-  }
-
-  update(id: number, updateSalespersonDto: UpdateSalespersonDto) {
-    return `This action updates a #${id} salesperson`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} salesperson`;
-  }
+  
 }

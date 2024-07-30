@@ -20,10 +20,19 @@ export class BusinessService {
         id: userId,
       },
     });
-    if (finduser.role !== 'BUSINESS_OWNER') {
+    if (finduser.role == 'USER') {
       await this.prisma.user.update({
         where: { id: userId },
         data: { role: 'BUSINESS_OWNER' },
+      });
+    } else if (finduser.role == 'SALESPERSON') {
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          role: 'BUSINESS_OWNER_AND_SALESPERSON',
+        },
       });
     }
     const createdBusiness = await this.prisma.business.create({
@@ -31,15 +40,17 @@ export class BusinessService {
         name: createBusinessDto.name,
         contactDetails: createBusinessDto.contactDetails,
         ownerId: userId,
+        paymailId: createBusinessDto.paymailId,
+        totalAmountEarned: 0,
       },
     });
     await this.prisma.user.update({
-      where:{
+      where: {
         id: userId,
       },
-      data:{
+      data: {
         businessId: createdBusiness.id,
-      }
+      },
     });
     return createdBusiness;
   }
