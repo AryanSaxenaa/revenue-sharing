@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePlaceOrderDto } from './dto/create-place-order.dto';
-import { PaymentsService } from 'src/payments/payments.service';
 import { DatabaseService } from 'src/database/database.service';
+import { PaymentsService } from 'src/payments/payments.service';
 @Injectable()
 export class PlaceOrderService {
   constructor(
@@ -35,18 +35,18 @@ export class PlaceOrderService {
     const sellerPaymailId = seller.paymailId;
     const paymentSuccessToBusiness =
       await this.paymentsService.processPaymentToBusiness(
-        businessPaymailId,
         buyerPaymailId,
         buyerPaymailPassword,
+        businessPaymailId,
         productDetail.price,
         productDetail.revenueSplit,
       );
 
     const paymentSuccessToSalesPerson =
       await this.paymentsService.processPaymentToSalesPerson(
-        sellerPaymailId,
         buyerPaymailId,
         buyerPaymailPassword,
+        sellerPaymailId,
         productDetail.revenueSplit,
       );
 

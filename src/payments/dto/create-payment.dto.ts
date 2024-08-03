@@ -1,5 +1,6 @@
 export class CreatePaymentDto {
-  sellerId: number;
   buyerPaymailId: string;
   buyerPaymailPassword: string;
+  sellerpaymailId: string;
+  amount: number;
 }

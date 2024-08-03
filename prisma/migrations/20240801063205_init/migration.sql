@@ -9,7 +9,7 @@ CREATE TABLE "users" (
     "role" "UserRole" NOT NULL DEFAULT 'USER',
     "businessId" INTEGER,
     "sellerId" INTEGER,
-    "totalAmountSpent" INTEGER NOT NULL,
+    "totalAmountSpent" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

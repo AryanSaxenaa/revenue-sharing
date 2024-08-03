@@ -1,10 +1,10 @@
-import { IsNumber, IsOptional, IsPositive, IsString, Length } from 'class-validator';
-
+import { IsNumber, IsPositive, IsString, Length } from 'class-validator';
+ 
 export class CreateProductDto {
   @IsString()
   @Length(1, 50)
   name: string;
-  @IsString()
+  @IsString() 
   description: string;
   @IsNumber()
   @IsPositive()
@@ -12,10 +12,4 @@ export class CreateProductDto {
   @IsNumber()
   @IsPositive()
   revenueSplit: number;
-  @IsNumber()
-  @IsPositive()
-  @IsOptional()
-  businessId: number;
-  @IsNumber()
-  userId: number;
 }

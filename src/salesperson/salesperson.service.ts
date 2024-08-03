@@ -37,5 +37,21 @@ export class SalespersonService {
       }
     });
   }
+
+
+  async findAll(){
+    return this.databaseService.seller.findMany({
+      orderBy:{
+        rank: 'asc',
+      }
+    })
+  }
+  async findOne(id: number) {
+    return this.databaseService.seller.findFirst({
+      where:{
+        id: id,
+      }
+    })
+  }
   
 }

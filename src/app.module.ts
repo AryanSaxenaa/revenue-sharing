@@ -9,9 +9,17 @@ import { PaymentsModule } from './payments/payments.module';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
 import { PlaceOrderModule } from './place-order/place-order.module';
-
 @Module({
-  imports: [UsersModule, BusinessModule, ProductModule, SalespersonModule, PaymentsModule, AuthModule, DatabaseModule, PlaceOrderModule],
+  imports: [
+    UsersModule,
+    BusinessModule,
+    ProductModule,
+    SalespersonModule,
+    PaymentsModule,
+    AuthModule,
+    DatabaseModule,
+    PlaceOrderModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

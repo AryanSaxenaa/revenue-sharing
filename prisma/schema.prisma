@@ -26,7 +26,7 @@ model User {
   products  Product[]
   purchases Purchase[]
   seller    Seller[]
-  totalAmountSpent  Int
+  totalAmountSpent  Int  @default(0)
   @@map("users")
 }
 
@@ -37,7 +37,7 @@ model Business {
   ownerId       Int       @unique
   paymailId     String    @unique
   owner         User      @relation(fields: [ownerId], references: [id])
-  totalAmountEarned   Int
+  totalAmountEarned   Int @default(0)
   products      Product[]
 
   @@map("businesses")
@@ -63,9 +63,9 @@ model Seller {
   sellerUserId    Int     
   userId          User    @relation(fields: [sellerUserId], references: [id])
   paymailId       String  @unique
-  totalAmountEarned Int   
-  totalSalesMade    Int
-  rank              Int
+  totalAmountEarned Int   @default(0)
+  totalSalesMade    Int   @default(0)
+  rank              Int   
 }
 
 model Purchase {
